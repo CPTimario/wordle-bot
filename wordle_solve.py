@@ -4,15 +4,13 @@ import sys
 from datetime import date
 
 import requests
-from selenium import webdriver
 from selenium.webdriver import ActionChains
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
-from webdriver_manager.chrome import ChromeDriverManager
+
+import util
 
 
 def retrieve_js():
@@ -43,11 +41,7 @@ def get_current_word(content: str):
 
 
 def solve_wordle(word: str):
-    chrome_service = Service(ChromeDriverManager().install())
-    chrome_options = Options()
-    chrome_options.add_experimental_option("detach", True)
-    driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
-    driver.get('https://www.powerlanguage.co.uk/wordle/')
+    driver = util.open_game('https://www.powerlanguage.co.uk/wordle/')
     game = WebDriverWait(driver, 5).until(
         expected_conditions.presence_of_element_located((By.XPATH, '/html/body/game-app')))
     ActionChains(driver).move_to_element_with_offset(game, 200, 200).click().perform()
